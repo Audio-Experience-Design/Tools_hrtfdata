@@ -15,20 +15,20 @@ def wrap_closed_interval(values, lower, upper):
     return np.where((values < lower) | (values > upper), wrap_closed_open_interval(values, lower, upper), values)
 
 
-def spherical2interaural(azimuth, elevation, radius, angles_in_degrees=True):
-    if angles_in_degrees:
+def spherical2interaural(azimuth, elevation, radius, in_angles_as_degrees=True, out_angles_as_degrees=True):
+    if in_angles_as_degrees:
         azimuth = np.deg2rad(azimuth)
         elevation = np.deg2rad(elevation)
     lateral = np.arcsin(np.sin(azimuth) * np.cos(elevation))
     vertical = np.arctan2(np.tan(elevation), np.cos(azimuth))
-    if angles_in_degrees:
+    if out_angles_as_degrees:
         return np.rad2deg(lateral), np.rad2deg(vertical), radius
     else:
         return lateral, vertical, radius
 
 
-def spherical2cartesian(azimuth, elevation, radius, angles_in_degrees=True):
-    if angles_in_degrees:
+def spherical2cartesian(azimuth, elevation, radius, in_angles_as_degrees=True):
+    if in_angles_as_degrees:
         azimuth = np.deg2rad(azimuth)
         elevation = np.deg2rad(elevation)
     hoz_proj = radius * np.cos(elevation)
@@ -38,46 +38,46 @@ def spherical2cartesian(azimuth, elevation, radius, angles_in_degrees=True):
     return x, y, z
 
 
-def cartesian2spherical(x, y, z, angles_in_degrees=True):
+def cartesian2spherical(x, y, z, out_angles_as_degrees=True):
     x = np.asarray(x)
     y = np.asarray(y)
     z = np.asarray(z)
     azimuth = np.arctan2(y, x)
     elevation = np.arctan2(z, np.sqrt(x**2 + y**2))
     radius = np.sqrt(x**2 + y**2 + z**2)
-    if angles_in_degrees:
+    if out_angles_as_degrees:
         return np.rad2deg(azimuth), np.rad2deg(elevation), radius
     else:
         return azimuth, elevation, radius
 
 
-def cartesian2interaural(x, y, z, angles_in_degrees=True):
+def cartesian2interaural(x, y, z, out_angles_as_degrees=True):
     x = np.asarray(x)
     y = np.asarray(y)
     z = np.asarray(z)
     lateral = np.arctan2(y, np.sqrt(x**2 + z**2))
     vertical = np.arctan2(z, x) 
     radius = np.sqrt(x**2 + y**2 + z**2)
-    if angles_in_degrees:
+    if out_angles_as_degrees:
         return np.rad2deg(lateral), np.rad2deg(vertical), radius
     else:
         return lateral, vertical, radius
 
 
-def interaural2spherical(lateral, vertical, radius, angles_in_degrees=True):
-    if angles_in_degrees:
+def interaural2spherical(lateral, vertical, radius, in_angles_as_degrees=True, out_angles_as_degrees=True):
+    if in_angles_as_degrees:
         lateral = np.deg2rad(lateral)
         vertical = np.deg2rad(vertical)
     azimuth = np.arctan2(np.tan(lateral), np.cos(vertical))
     elevation = np.arcsin(np.cos(lateral) * np.sin(vertical))
-    if angles_in_degrees:
+    if out_angles_as_degrees:
         return np.rad2deg(azimuth), np.rad2deg(elevation), radius
     else:
         return azimuth, elevation, radius
 
 
-def interaural2cartesian(lateral, vertical, radius, angles_in_degrees=True):
-    if angles_in_degrees:
+def interaural2cartesian(lateral, vertical, radius, in_angles_as_degrees=True):
+    if in_angles_as_degrees:
         lateral = np.deg2rad(lateral)
         vertical = np.deg2rad(vertical)
     med_proj = radius * np.cos(lateral)
